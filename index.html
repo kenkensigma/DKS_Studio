@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DKS Studio — Premium Digital Agency</title>
+    <meta name="description" content="We craft digital ecosystems and luxury experiences.">
+    
+    <!-- Premium Geometric Grotesque Font (Instrument Sans gives that Apple/Linear/Vercel feel) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Instrument Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        'dks-black': '#09090b',
+                        'dks-gray': '#71717a',
+                        'dks-light': '#f4f4f5',
+                        'dks-white': '#ffffff',
+                    },
+                    letterSpacing: {
+                        tighter: '-0.04em',
+                        tight: '-0.02em',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <!-- GSAP for Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Translations Dictionary -->
+    <script src="lang.js"></script>
+    
+    <!-- External Scripts -->
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+    <script src="https://unpkg.com/split-type"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="overflow-hidden">
+            <h1 id="preloader-text" class="text-3xl md:text-5xl font-semibold tracking-tighter opacity-0 translate-y-full">DKS Studio</h1>
+        </div>
+        <div class="w-48 h-[1px] bg-dks-light mt-8 relative overflow-hidden">
+            <div id="preloader-bar" class="absolute top-0 left-0 h-full w-0 bg-dks-black"></div>
+        </div>
+        <div id="preloader-perc" class="mt-4 text-xs font-medium text-dks-gray tracking-widest uppercase">0%</div>
+    </div>
+
+    <!-- Scroll Progress -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-[2px] bg-dks-black z-[100] w-0"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 py-6 px-6 md:px-12 transition-all duration-500 bg-dks-white/0 backdrop-blur-sm">
+        <div class="max-w-[1600px] mx-auto flex items-center justify-between">
+            <a href="#" class="text-xl font-semibold tracking-tight text-dks-black group flex items-center gap-2">
+                <div class="w-2 h-2 bg-dks-black rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+                DKS
+            </a>
+            
+            <div class="hidden md:flex items-center space-x-12 text-sm font-medium text-dks-black">
+                <a href="#about" class="hover-underline" data-i18n="nav_studio">Studio</a>
+                <a href="#services" class="hover-underline" data-i18n="nav_expertise">Expertise</a>
+                <a href="#works" class="hover-underline" data-i18n="nav_works">Works</a>
+                <a href="#pricing" class="hover-underline" data-i18n="nav_pricing">Pricing</a>
+                <a href="#faq" class="hover-underline" data-i18n="nav_faq">FAQ</a>
+            </div>
+
+            <div class="hidden md:flex items-center gap-6">
+                <!-- Language Toggle -->
+                <div class="flex items-center gap-2 text-sm font-semibold text-dks-gray">
+                    <button class="lang-toggle text-dks-black transition-colors" data-lang="en">EN</button>
+                    <span class="w-[1px] h-3 bg-neutral-300"></span>
+                    <button class="lang-toggle hover:text-dks-black transition-colors" data-lang="id">ID</button>
+                </div>
+
+                <div class="magnetic-wrap">
+                    <a href="#contact" data-i18n="nav_talk" class="magnetic-content h-12 px-8 bg-dks-black text-dks-white rounded-full text-sm font-medium hover:bg-neutral-800 transition-colors flex items-center justify-center">
+                        Let's Talk
+                    </a>
+                </div>
+            </div>
+
+            <button id="burger-btn" class="md:hidden text-dks-black relative z-[60]" aria-label="Menu">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-dks-white z-[55] flex flex-col justify-center items-center px-6 opacity-0 pointer-events-none transition-opacity duration-500">
+        <div class="flex flex-col items-center space-y-8 text-3xl font-medium tracking-tight text-dks-black">
+            <a href="#about" class="mobile-link hover:text-dks-gray transition-colors" data-i18n="nav_studio">Studio</a>
+            <a href="#services" class="mobile-link hover:text-dks-gray transition-colors" data-i18n="nav_expertise">Expertise</a>
+            <a href="#works" class="mobile-link hover:text-dks-gray transition-colors" data-i18n="nav_works">Works</a>
+            <a href="#pricing" class="mobile-link hover:text-dks-gray transition-colors" data-i18n="nav_pricing">Pricing</a>
+            <a href="#faq" class="mobile-link hover:text-dks-gray transition-colors" data-i18n="nav_faq">FAQ</a>
+            <a href="#contact" class="mobile-link mt-8 px-10 py-4 bg-dks-black text-dks-white rounded-full text-lg" data-i18n="nav_talk">Let's Talk</a>
+            
+            <div class="flex items-center gap-4 mt-12 text-lg font-semibold text-dks-gray">
+                <button class="lang-toggle text-dks-black transition-colors" data-lang="en">EN</button>
+                <span class="w-[1px] h-4 bg-neutral-300"></span>
+                <button class="lang-toggle hover:text-dks-black transition-colors" data-lang="id">ID</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-screen pt-32 pb-20 flex flex-col items-center justify-end px-6 md:px-12 overflow-hidden">
+        
+        <!-- Abstract Parallax Gradients (Extremely subtle) -->
+        <div class="absolute top-[10%] left-[20%] w-[600px] h-[600px] bg-neutral-100 rounded-full blur-[120px] opacity-50 hero-parallax" data-speed="0.05"></div>
+        <div class="absolute bottom-[20%] right-[10%] w-[400px] h-[400px] bg-neutral-50 rounded-full blur-[100px] opacity-70 hero-parallax" data-speed="-0.03"></div>
+
+        <div class="w-full max-w-[1600px] flex flex-col items-center relative z-10">
+            <!-- Metric Badge -->
+            <div class="hero-reveal opacity-0 translate-y-8 flex items-center gap-4 bg-dks-light/50 backdrop-blur-md border border-neutral-200 pl-2 pr-4 py-1.5 rounded-full mb-12">
+                <div class="flex -space-x-3">
+                    <img class="w-8 h-8 rounded-full border-2 border-dks-white" src="https://i.pravatar.cc/100?img=5" alt="Avatar">
+                    <img class="w-8 h-8 rounded-full border-2 border-dks-white" src="https://i.pravatar.cc/100?img=6" alt="Avatar">
+                    <img class="w-8 h-8 rounded-full border-2 border-dks-white" src="https://i.pravatar.cc/100?img=7" alt="Avatar">
+                </div>
+                <span class="text-xs font-semibold text-dks-black uppercase tracking-widest"><span data-i18n="hero_badge">Global Partners</span></span></span>
+            </div>
+            
+            <!-- Massive Typographic Headline -->
+            <h1 class="text-center font-semibold text-[13vw] leading-[0.9] tracking-tighter text-dks-black mb-8 w-full uppercase">
+                <div class="overflow-hidden"><span class="hero-title-line inline-block translate-y-full" data-i18n="hero_title_1">Digital</span></div>
+                <div class="overflow-hidden flex justify-center items-center">
+                    <span class="hero-title-line inline-block translate-y-full" data-i18n="hero_title_2">Excellence</span>
+                </div>
+            </h1>
+
+            <div class="hero-reveal opacity-0 translate-y-8 flex flex-col md:flex-row items-center justify-between w-full max-w-[1000px] mt-12 gap-8 text-center md:text-left">
+                <p class="text-lg md:text-xl text-dks-gray max-w-[400px] font-medium leading-relaxed">
+                    <span data-i18n="hero_desc">We craft premium digital infrastructure and luxury digital experiences that elevate brands globally.</span></span>
+                </p>
+                <div class="flex items-center gap-4">
+                    <div class="magnetic-wrap">
+                        <a href="#contact" class="magnetic-content h-14 px-8 bg-dks-black text-dks-white rounded-full text-sm font-semibold hover:bg-neutral-800 transition-colors gap-2">
+                            <span data-i18n="hero_btn">Start a Project</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Studio Narrative (Scrub Reveal) -->
+    <section id="about" class="py-[120px] md:py-[200px] px-6 md:px-12 bg-dks-white">
+        <div class="max-w-[1200px] mx-auto flex flex-col items-center">
+            <span class="text-xs font-semibold uppercase tracking-widest text-dks-gray mb-12 block" data-i18n="about_label">Studio Philosophy</span>
+            <h2 id="scrub-text" class="text-[32px] md:text-[56px] lg:text-[72px] font-medium tracking-tight leading-[1.1] text-dks-black text-center" data-i18n="about_text">
+                We believe the web should be flawless. We strip away the unnecessary and focus entirely on creating sophisticated, ultra-smooth platforms that perform perfectly on every device.
+            </h2>
+        </div>
+    </section>
+
+    <!-- Selected Works (Parallax Edges) -->
+    <section id="works" class="py-[80px] md:py-[100px] px-4 md:px-12 bg-dks-light rounded-t-[40px] md:rounded-t-[80px]">
+        <div class="max-w-[1600px] mx-auto">
+            <div class="flex justify-between items-end mb-20">
+                <h3 class="text-4xl md:text-6xl font-semibold tracking-tighter text-dks-black" data-i18n="works_title">Selected<br>Works</h3>
+                <a href="#" class="hover-underline text-dks-gray font-medium text-sm md:text-base mb-2" data-i18n="works_view_all">View All Projects</a>
+            </div>
+
+            <div class="flex flex-col gap-32">
+                <!-- Project 1: House of Burger -->
+                <div class="project-wrap group cursor-pointer">
+                    <div class="w-full h-[50vh] md:h-[80vh] overflow-hidden rounded-[24px] mb-8 relative bg-dks-white">
+                        <img src="image/HouseOfBurger.png" class="w-full h-[120%] object-cover parallax-img origin-top" alt="House of Burger">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dks-black/80 via-dks-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none flex flex-col justify-end p-8 md:p-12 text-dks-white">
+                            <div class="translate-y-8 group-hover:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
+                                <p class="text-sm md:text-base font-medium text-neutral-200 max-w-[500px] leading-relaxed" data-i18n="work_1_desc">A modern restaurant website featuring online burger ordering, an interactive menu showcase, and promotional campaigns designed to enhance the customer dining experience.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 px-2">
+                        <div>
+                            <h4 class="text-2xl md:text-3xl font-semibold tracking-tight text-dks-black" data-i18n="work_1_title">House of Burger</h4>
+                            <p class="text-dks-gray font-medium mt-2" data-i18n="work_1_cat">Restaurant E-commerce</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <span class="px-4 py-1.5 border border-neutral-300 rounded-full text-xs font-semibold text-dks-black uppercase tracking-wider" data-i18n="work_1_badge_1">Web App</span>
+                            <span class="px-4 py-1.5 border border-neutral-300 rounded-full text-xs font-semibold text-dks-black uppercase tracking-wider" data-i18n="work_1_badge_2">E-commerce</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2: Imaji Digital -->
+                <div class="project-wrap group cursor-pointer">
+                    <div class="w-full h-[50vh] md:h-[80vh] overflow-hidden rounded-[24px] mb-8 relative bg-dks-white">
+                        <img src="image/ImajiDigital.png" class="w-full h-[120%] object-cover parallax-img origin-top" alt="Imaji Digital">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dks-black/80 via-dks-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none flex flex-col justify-end p-8 md:p-12 text-dks-white">
+                            <div class="translate-y-8 group-hover:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
+                                <p class="text-sm md:text-base font-medium text-neutral-200 max-w-[500px] leading-relaxed" data-i18n="work_2_desc">A premium digital agency landing page showcasing 3D products, immersive AR experiences, and creative digital solutions through a modern, conversion-focused design.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 px-2">
+                        <div>
+                            <h4 class="text-2xl md:text-3xl font-semibold tracking-tight text-dks-black" data-i18n="work_2_title">Imaji Digital</h4>
+                            <p class="text-dks-gray font-medium mt-2" data-i18n="work_2_cat">Digital Agency</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <span class="px-4 py-1.5 border border-neutral-300 rounded-full text-xs font-semibold text-dks-black uppercase tracking-wider" data-i18n="work_2_badge_1">Landing Page</span>
+                            <span class="px-4 py-1.5 border border-neutral-300 rounded-full text-xs font-semibold text-dks-black uppercase tracking-wider" data-i18n="work_2_badge_2">3D/AR</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3: SchoolCMS -->
+                <div class="project-wrap group cursor-pointer">
+                    <div class="w-full h-[50vh] md:h-[80vh] overflow-hidden rounded-[24px] mb-8 relative bg-dks-white">
+                        <img src="image/mockup2.png" class="w-full h-[120%] object-cover parallax-img origin-top" alt="SchoolCMS">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dks-black/80 via-dks-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none flex flex-col justify-end p-8 md:p-12 text-dks-white">
+                            <div class="translate-y-8 group-hover:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
+                                <p class="text-sm md:text-base font-medium text-neutral-200 max-w-[500px] leading-relaxed" data-i18n="work_3_desc">A comprehensive school platform providing announcements, news, galleries, events, and institutional information through an intuitive and responsive interface.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 px-2">
+                        <div>
+                            <h4 class="text-2xl md:text-3xl font-semibold tracking-tight text-dks-black" data-i18n="work_3_title">SchoolCMS</h4>
+                            <p class="text-dks-gray font-medium mt-2" data-i18n="work_3_cat">Educational Platform</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <span class="px-4 py-1.5 border border-neutral-300 rounded-full text-xs font-semibold text-dks-black uppercase tracking-wider" data-i18n="work_3_badge_1">CMS</span>
+                            <span class="px-4 py-1.5 border border-neutral-300 rounded-full text-xs font-semibold text-dks-black uppercase tracking-wider" data-i18n="work_3_badge_2">Web App</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4: Personal Portfolio -->
+                <div class="project-wrap group cursor-pointer hidden-project hidden opacity-0 translate-y-10 transition-all duration-700 ease-out">
+                    <div class="w-full h-[50vh] md:h-[80vh] overflow-hidden rounded-[24px] mb-8 relative bg-dks-white">
+                        <img src="image/portfolio.jpeg" class="w-full h-[120%] object-cover parallax-img origin-top" alt="Personal Portfolio">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dks-black/80 via-dks-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none flex flex-col justify-end p-8 md:p-12 text-dks-white">
+                            <div class="translate-y-8 group-hover:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
+                                <p class="text-sm md:text-base font-medium text-neutral-200 max-w-[500px] leading-relaxed" data-i18n="work_4_desc">A modern portfolio website showcasing creativity, technical expertise, and personal branding through a minimalist and responsive design.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 px-2">
+                        <div>
+                            <h4 class="text-2xl md:text-3xl font-semibold tracking-tight text-dks-black" data-i18n="work_4_title">Personal Portfolio</h4>
+                            <p class="text-dks-gray font-medium mt-2" data-i18n="work_4_cat">Portfolio Website</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <span class="px-4 py-1.5 border border-neutral-300 rounded-full text-xs font-semibold text-dks-black uppercase tracking-wider" data-i18n="work_4_badge_1">Portfolio</span>
+                            <span class="px-4 py-1.5 border border-neutral-300 rounded-full text-xs font-semibold text-dks-black uppercase tracking-wider" data-i18n="work_4_badge_2">Web Design</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View More Projects Button -->
+            <div class="flex justify-center mt-20">
+                <div class="magnetic-wrap">
+                    <button id="view-more-btn" class="magnetic-content h-14 px-8 bg-dks-black text-dks-white rounded-full text-sm font-semibold hover:bg-neutral-800 transition-colors gap-2 flex items-center justify-center">
+                        <span data-i18n="works_view_more">View More Projects</span>
+                        <i data-lucide="chevron-down" id="view-more-icon" class="w-4 h-4 transition-transform duration-300"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Capabilities / Services (Interactive Hover) -->
+    <section id="services" class="py-[120px] md:py-[200px] px-6 md:px-12 bg-dks-white relative">
+        <div class="max-w-[1400px] mx-auto">
+            <h3 class="text-4xl md:text-6xl font-semibold tracking-tighter text-dks-black mb-20 text-center" data-i18n="expertise_title">Engineering Expertise</h3>
+            
+            <div class="w-full border-t border-neutral-200 relative" id="service-list">
+                
+                <!-- Floating Image Container -->
+                <div class="service-img-wrap hidden md:block">
+                    <img id="hover-img" src="" class="w-full h-full object-cover">
+                </div>
+
+                <div class="service-row group py-8 border-b border-neutral-200 flex flex-col md:flex-row md:items-center justify-between cursor-pointer transition-colors hover:bg-dks-light/50 px-4" data-img="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop">
+                    <div class="text-3xl md:text-5xl font-medium tracking-tight text-dks-black group-hover:translate-x-4 transition-transform duration-500" data-i18n="exp_1_title">Digital Strategy</div>
+                    <div class="text-dks-gray md:text-right mt-4 md:mt-0 font-medium" data-i18n="exp_1_sub">Architecture, Planning & Discovery</div>
+                </div>
+                
+                <div class="service-row group py-8 border-b border-neutral-200 flex flex-col md:flex-row md:items-center justify-between cursor-pointer transition-colors hover:bg-dks-light/50 px-4" data-img="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop">
+                    <div class="text-3xl md:text-5xl font-medium tracking-tight text-dks-black group-hover:translate-x-4 transition-transform duration-500" data-i18n="exp_2_title">UI/UX Design Systems</div>
+                    <div class="text-dks-gray md:text-right mt-4 md:mt-0 font-medium" data-i18n="exp_2_sub">Tokenized Interfaces & Interactions</div>
+                </div>
+
+                <div class="service-row group py-8 border-b border-neutral-200 flex flex-col md:flex-row md:items-center justify-between cursor-pointer transition-colors hover:bg-dks-light/50 px-4" data-img="https://images.unsplash.com/photo-1618761714954-0b8cd0026356?q=80&w=600&auto=format&fit=crop">
+                    <div class="text-3xl md:text-5xl font-medium tracking-tight text-dks-black group-hover:translate-x-4 transition-transform duration-500" data-i18n="exp_3_title">Web Application Engineering</div>
+                    <div class="text-dks-gray md:text-right mt-4 md:mt-0 font-medium" data-i18n="exp_3_sub">Scalable React & Next.js Platforms</div>
+                </div>
+
+                <div class="service-row group py-8 border-b border-neutral-200 flex flex-col md:flex-row md:items-center justify-between cursor-pointer transition-colors hover:bg-dks-light/50 px-4" data-img="https://images.unsplash.com/photo-1555421689-d68471e189f2?q=80&w=600&auto=format&fit=crop">
+                    <div class="text-3xl md:text-5xl font-medium tracking-tight text-dks-black group-hover:translate-x-4 transition-transform duration-500" data-i18n="exp_4_title">Backend & API Orchestration</div>
+                    <div class="text-dks-gray md:text-right mt-4 md:mt-0 font-medium" data-i18n="exp_4_sub">Secure, High-Performance Servers</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics / Counters -->
+    <section id="metrics" class="py-[80px] md:py-[100px] px-6 md:px-12 bg-dks-black text-dks-white">
+        <div class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-16 py-12 md:py-20 border-t border-b border-white/10">
+            <div class="flex flex-col items-center md:items-start">
+                <div class="text-[80px] md:text-[120px] font-semibold leading-none tracking-tighter flex items-start">
+                    <span class="counter" data-target="10">0</span>
+                    <span class="text-4xl md:text-6xl font-medium text-dks-white/50 mt-3 md:mt-5 ml-1">+</span>
+                </div>
+                <div class="text-lg font-medium text-dks-gray mt-4" data-i18n="metrics_delivered">Enterprise Projects Delivered</div>
+            </div>
+            <div class="flex flex-col items-center md:items-start">
+                <div class="text-[80px] md:text-[120px] font-semibold leading-none tracking-tighter flex items-start">
+                    <span class="counter" data-target="99">0</span>
+                    <span class="text-4xl md:text-6xl font-medium text-dks-white/50 mt-3 md:mt-5 ml-1">%</span>
+                </div>
+                <div class="text-lg font-medium text-dks-gray mt-4" data-i18n="metrics_satisfaction">Client Satisfaction Rate</div>
+            </div>
+            <div class="flex flex-col items-center md:items-start">
+                <div class="text-[80px] md:text-[120px] font-semibold leading-none tracking-tighter flex items-start">
+                    <span class="counter" data-target="1">0</span>
+                    <span class="text-4xl md:text-6xl font-medium text-dks-white/50 mt-3 md:mt-5 ml-1">Y</span>
+                </div>
+                <div class="text-lg font-medium text-dks-gray mt-4" data-i18n="metrics_years">Years of Experience</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial -->
+    <section id="testimonial" class="py-[100px] md:py-[160px] bg-dks-white overflow-hidden relative">
+        <div class="max-w-[1400px] mx-auto relative px-6 md:px-12">
+            <!-- Swiper -->
+            <div class="swiper testimonialSwiper pb-12 cursor-grab active:cursor-grabbing">
+                <div class="swiper-wrapper">
+                    
+                    <!-- Review 1 -->
+                    <div class="swiper-slide flex flex-col items-center text-center">
+                        <i data-lucide="quote" class="w-10 h-10 md:w-12 md:h-12 text-dks-gray/30 mx-auto mb-8 md:mb-10"></i>
+                        <h3 class="text-2xl md:text-4xl lg:text-5xl font-medium tracking-tight text-dks-black leading-[1.3] mb-10 md:mb-12 max-w-[900px]">
+                            "DKS Studio didn't just redesign our platform; they completely re-engineered our digital presence. The attention to detail, motion, and typography is unmatched in the industry."
+                        </h3>
+                        <div class="flex flex-col items-center justify-center gap-4">
+                            <img src="https://i.pravatar.cc/150?img=11" alt="Client" class="w-14 h-14 md:w-16 md:h-16 rounded-full grayscale">
+                            <div>
+                                <div class="font-semibold text-dks-black">Jonathan Hayes</div>
+                                <div class="text-xs md:text-sm font-medium text-dks-gray">CEO, Vertex Analytics</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Review 2 -->
+                    <div class="swiper-slide flex flex-col items-center text-center">
+                        <i data-lucide="quote" class="w-10 h-10 md:w-12 md:h-12 text-dks-gray/30 mx-auto mb-8 md:mb-10"></i>
+                        <h3 class="text-2xl md:text-4xl lg:text-5xl font-medium tracking-tight text-dks-black leading-[1.3] mb-10 md:mb-12 max-w-[900px]">
+                            "The results were immediate. Our conversion rate increased by 45% within the first month. They truly understand the intersection of aesthetics and business goals."
+                        </h3>
+                        <div class="flex flex-col items-center justify-center gap-4">
+                            <img src="https://i.pravatar.cc/150?img=47" alt="Client" class="w-14 h-14 md:w-16 md:h-16 rounded-full grayscale">
+                            <div>
+                                <div class="font-semibold text-dks-black">Sarah Jenkins</div>
+                                <div class="text-xs md:text-sm font-medium text-dks-gray">CMO, Lumina Tech</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Review 3 -->
+                    <div class="swiper-slide flex flex-col items-center text-center">
+                        <i data-lucide="quote" class="w-10 h-10 md:w-12 md:h-12 text-dks-gray/30 mx-auto mb-8 md:mb-10"></i>
+                        <h3 class="text-2xl md:text-4xl lg:text-5xl font-medium tracking-tight text-dks-black leading-[1.3] mb-10 md:mb-12 max-w-[900px]">
+                            "Working with DKS was a breeze. They delivered our massive e-commerce platform ahead of schedule, with flawless code and a breathtaking design."
+                        </h3>
+                        <div class="flex flex-col items-center justify-center gap-4">
+                            <img src="https://i.pravatar.cc/150?img=68" alt="Client" class="w-14 h-14 md:w-16 md:h-16 rounded-full grayscale">
+                            <div>
+                                <div class="font-semibold text-dks-black">Michael Chang</div>
+                                <div class="text-xs md:text-sm font-medium text-dks-gray">Founder, Thread & Co.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Review 4 -->
+                    <div class="swiper-slide flex flex-col items-center text-center">
+                        <i data-lucide="quote" class="w-10 h-10 md:w-12 md:h-12 text-dks-gray/30 mx-auto mb-8 md:mb-10"></i>
+                        <h3 class="text-2xl md:text-4xl lg:text-5xl font-medium tracking-tight text-dks-black leading-[1.3] mb-10 md:mb-12 max-w-[900px]">
+                            "A masterclass in digital luxury. They elevated our brand identity to a level we didn't know was possible. Every interaction feels premium."
+                        </h3>
+                        <div class="flex flex-col items-center justify-center gap-4">
+                            <img src="https://i.pravatar.cc/150?img=32" alt="Client" class="w-14 h-14 md:w-16 md:h-16 rounded-full grayscale">
+                            <div>
+                                <div class="font-semibold text-dks-black">Elena Rostova</div>
+                                <div class="text-xs md:text-sm font-medium text-dks-gray">Director, Horizon Real Estate</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Pagination -->
+                <div class="swiper-pagination mt-8 relative flex justify-center"></div>
+            </div>
+            
+            <div class="flex justify-center mt-4">
+                <span class="text-[10px] md:text-xs font-semibold uppercase tracking-widest text-dks-gray bg-dks-light px-4 py-2 rounded-full">&lt; Swipe to view more &gt;</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pipeline Process (Sticky layout) -->
+    <section id="process" class="py-[100px] md:py-[150px] px-6 md:px-12 bg-dks-light">
+        <div class="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 relative">
+            <div class="lg:col-span-4 relative">
+                <div class="sticky top-40">
+                    <h3 class="text-4xl md:text-5xl font-semibold tracking-tighter text-dks-black mb-6" data-i18n="pipeline_title">Our Pipeline</h3>
+                    <p class="text-dks-gray font-medium leading-relaxed max-w-[300px]" data-i18n="pipeline_desc">A methodical, precision-engineered workflow ensuring flawless execution from initial discovery to final deployment.</p>
+                </div>
+            </div>
+            <div class="lg:col-span-8 flex flex-col gap-8 md:gap-16 pt-12 lg:pt-0">
+                <!-- Step 1 -->
+                <div class="process-card flex flex-col md:flex-row gap-6 p-8 md:p-12 bg-dks-light rounded-[24px] border border-neutral-200 opacity-0 translate-y-12">
+                    <div class="text-xl font-medium text-dks-gray md:w-32">01</div>
+                    <div>
+                        <h4 class="text-2xl md:text-3xl font-semibold tracking-tight text-dks-black mb-4" data-i18n="proc_1_title">Discovery & Strategy</h4>
+                        <p class="text-dks-gray leading-relaxed max-w-[500px]" data-i18n="proc_1_desc">Deep analysis of requirements, architectural mapping, and defining clear, actionable success metrics.</p>
+                    </div>
+                </div>
+                <!-- Step 2 -->
+                <div class="process-card flex flex-col md:flex-row gap-6 p-8 md:p-12 bg-dks-light rounded-[24px] border border-neutral-200 opacity-0 translate-y-12">
+                    <div class="text-xl font-medium text-dks-gray md:w-32">02</div>
+                    <div>
+                        <h4 class="text-2xl md:text-3xl font-semibold tracking-tight text-dks-black mb-4" data-i18n="proc_2_title">Design Systems</h4>
+                        <p class="text-dks-gray leading-relaxed max-w-[500px]" data-i18n="proc_2_desc">Crafting bespoke user interfaces, tokenized design elements, and fluid micro-interactions.</p>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="process-card flex flex-col md:flex-row gap-6 p-8 md:p-12 bg-dks-light rounded-[24px] border border-neutral-200 opacity-0 translate-y-12">
+                    <div class="text-xl font-medium text-dks-gray md:w-32">03</div>
+                    <div>
+                        <h4 class="text-2xl md:text-3xl font-semibold tracking-tight text-dks-black mb-4" data-i18n="proc_3_title">Engineering</h4>
+                        <p class="text-dks-gray leading-relaxed max-w-[500px]" data-i18n="proc_3_desc">Writing immaculate, scalable codebase using modern frameworks, ensuring blistering fast load times.</p>
+                    </div>
+                </div>
+                <!-- Step 4 -->
+                <div class="process-card flex flex-col md:flex-row gap-6 p-8 md:p-12 bg-dks-light rounded-[24px] border border-neutral-200 opacity-0 translate-y-12">
+                    <div class="text-xl font-medium text-dks-gray md:w-32">04</div>
+                    <div>
+                        <h4 class="text-2xl md:text-3xl font-semibold tracking-tight text-dks-black mb-4" data-i18n="proc_4_title">QA & Launch</h4>
+                        <p class="text-dks-gray leading-relaxed max-w-[500px]" data-i18n="proc_4_desc">Rigorous multi-device performance auditing followed by a seamless platform deployment.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="py-[120px] md:py-[200px] px-6 md:px-12 bg-dks-white">
+        <div class="max-w-[1400px] mx-auto">
+            <div class="text-center mb-10">
+                <span class="text-xs font-semibold uppercase tracking-widest text-dks-gray mb-4 block"><span data-i18n="pricing_label">Investment</span>
+                <h3 class="text-4xl md:text-6xl font-semibold tracking-tighter text-dks-black" data-i18n="pricing_title">Transparent Pricing</h3>
+            </div>
+            
+            <!-- Sleek Pill Toggle -->
+            <div class="flex justify-center mb-16 md:mb-20">
+                <div class="relative bg-dks-light p-1.5 rounded-full flex text-sm font-semibold tracking-tight border border-neutral-200 w-[95%] max-w-[600px] mx-auto overflow-hidden">
+                    <!-- Sliding background -->
+                    <div id="pricing-slider" class="absolute top-1.5 left-1.5 h-[calc(100%-12px)] bg-dks-black rounded-full transition-all duration-500 ease-[cubic-bezier(0.86,0,0.07,1)] pointer-events-none"></div>
+                    
+                    <button class="pricing-toggle-btn flex-1 relative z-10 py-3 text-center rounded-full text-dks-white transition-colors duration-500 whitespace-nowrap px-2" data-type="landing" data-i18n="pricing_tab_1">Landing Page</button>
+                    <button class="pricing-toggle-btn flex-1 relative z-10 py-3 text-center text-dks-gray hover:text-dks-black transition-colors duration-500 whitespace-nowrap px-2" data-type="profile" data-i18n="pricing_tab_2">Company Profile</button>
+                    <button class="pricing-toggle-btn flex-1 relative z-10 py-3 text-center text-dks-gray hover:text-dks-black transition-colors duration-500 whitespace-nowrap px-2" data-type="ecommerce" data-i18n="pricing_tab_3">E-Commerce</button>
+                    <button class="pricing-toggle-btn flex-1 relative z-10 py-3 text-center text-dks-gray hover:text-dks-black transition-colors duration-500 whitespace-nowrap px-2" data-type="portfolio" data-i18n="pricing_tab_4">Portfolio Website</button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Tier 1 -->
+                <div class="bg-dks-light p-8 md:p-12 rounded-[24px] border border-neutral-200 flex flex-col hover:shadow-2xl transition-shadow duration-500">
+                    <div class="text-sm font-semibold text-dks-gray uppercase tracking-widest mb-2 title-val" data-landing="Essential" data-profile="Essential" data-ecommerce="Essential" data-portfolio="Essential" data-i18n="price_tier_1">Essential</div>
+                    <div class="text-4xl md:text-5xl font-semibold tracking-tighter text-dks-black mb-6"><span class="price-val inline-block" data-landing="Rp899.000" data-profile="Rp1.499.000" data-ecommerce="Rp3.499.000" data-portfolio="Rp799.000">Rp999.000</span></div>
+                    <p class="text-dks-gray font-medium leading-relaxed mb-8 flex-grow desc-val" data-tier="1" data-i18n="price_tier_1_desc_landing">A high-conversion entry point with foundational design and perfect performance.</p>
+                    <!-- Landing Benefits -->
+                    <ul class="benefit-list space-y-4 mb-10 text-sm font-medium text-dks-black" data-for="landing">
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_l1">1 Responsive Landing Page</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_l2">Premium UI Design</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_l3">Mobile & Tablet Optimized</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_l4">Contact Form</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_l5">WhatsApp Integration</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_l6">Basic SEO</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_l7">Fast Loading</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_l8">2 Revisions</span></li>
+                    </ul>
+                    <!-- Profile Benefits -->
+                    <ul class="benefit-list space-y-4 mb-10 text-sm font-medium text-dks-black hidden" data-for="profile">
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_p1">Up to 5 Pages</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_p2">Responsive Design</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_p3">Company Information</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_p4">Services Section</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_p5">Contact Form</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_p6">WhatsApp Button</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_p7">Basic SEO</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_p8">2 Revisions</span></li>
+                    </ul>
+                    <!-- E-commerce Benefits -->
+                    <ul class="benefit-list space-y-4 mb-10 text-sm font-medium text-dks-black hidden" data-for="ecommerce">
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_e1">Up to 30 Products</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_e2">Shopping Cart</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_e3">Checkout</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_e4">Product Categories</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_e5">Responsive Design</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_e6">WhatsApp Checkout</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_e7">Basic SEO</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_e8">2 Revisions</span></li>
+                    </ul>
+                    <!-- Portfolio Benefits -->
+                    <ul class="benefit-list space-y-4 mb-10 text-sm font-medium text-dks-black hidden" data-for="portfolio">
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_port_1">1 Responsive Portfolio</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_port_2">Up to 5 Projects</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_port_3">About Me Section</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_port_4">Contact Form</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_port_5">Social Media Links</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_port_6">Mobile Responsive</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_port_7">Basic SEO</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t1_port_8">2 Revisions</span></li>
+                    </ul>
+                    <a href="#contact" class="block w-full py-4 text-center rounded-full border border-dks-black text-dks-black font-semibold hover:bg-dks-black hover:text-dks-white transition-colors" data-i18n="price_inquire">Inquire Now</a>
+                </div>
+                
+                <!-- Tier 2 -->
+                <div class="bg-dks-black p-8 md:p-12 rounded-[24px] text-dks-white flex flex-col transform lg:-translate-y-4 shadow-2xl relative">
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-dks-white text-dks-black text-[10px] font-bold uppercase tracking-widest py-1.5 px-4 rounded-full" data-i18n="price_tier_2_badge">Most Popular</div>
+                    <div class="text-sm font-semibold text-dks-gray uppercase tracking-widest mb-2 title-val" data-landing="Professional" data-profile="Professional" data-ecommerce="Professional" data-portfolio="Professional" data-i18n="price_tier_2">Professional</div>
+                    
+                    <div class="mb-6 flex items-center flex-wrap gap-4">
+                        <span class="text-4xl md:text-5xl font-semibold tracking-tighter price-val inline-block" data-landing="Rp1.499.000" data-profile="Rp2.499.000" data-ecommerce="Rp4.999.000" data-portfolio="Rp1.299.000">Rp1.499.000</span>
+                        <div class="flex flex-col justify-center">
+                            <span class="text-lg text-neutral-400 line-through font-medium price-val" data-landing="Rp1.899.000" data-profile="Rp3.199.000" data-ecommerce="Rp5.999.000" data-portfolio="Rp1.799.000">Rp1.899.000</span>
+                            <span class="text-[10px] text-dks-black bg-[#00E5FF] px-2 py-0.5 rounded font-bold uppercase tracking-wider mt-1">🔥 Best Value</span>
+                        </div>
+                    </div>
+
+                    <p class="text-neutral-400 font-medium leading-relaxed mb-8 flex-grow desc-val" data-tier="2" data-i18n="price_tier_2_desc_landing">Our complete pipeline. Strategic UX, complex layouts, and dynamic animations.</p>
+                    <!-- Landing Benefits -->
+                    <ul class="benefit-list space-y-4 mb-10 text-sm font-medium" data-for="landing">
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_l1">Everything in Essential</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_l2">Custom UI/UX Design</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_l3">Advanced Animations</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_l4">Multiple Sections</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_l5">Lead Generation Form</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_l6">Google Maps Integration</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_l7">Speed Optimization</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_l8">On-page SEO</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_l9">Free Deployment</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_l10">5 Revisions</span></li>
+                    </ul>
+                    <!-- Profile Benefits -->
+                    <ul class="benefit-list space-y-4 mb-10 text-sm font-medium hidden" data-for="profile">
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_p1">Everything in Essential</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_p2">Up to 10 Pages</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_p3">Custom UI Design</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_p4">Gallery</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_p5">News / Blog</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_p6">Google Maps</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_p7">Speed Optimization</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_p8">SEO Ready</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_p9">Free Deployment</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_p10">5 Revisions</span></li>
+                    </ul>
+                    <!-- E-commerce Benefits -->
+                    <ul class="benefit-list space-y-4 mb-10 text-sm font-medium hidden" data-for="ecommerce">
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_e1">Everything in Essential</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_e2">Unlimited Products</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_e3">Payment Gateway Integration</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_e4">Customer Accounts</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_e5">Order Management</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_e6">Inventory Management</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_e7">Discount Coupons</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_e8">Admin Dashboard</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_e9">Speed Optimization</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_e10">Free Deployment</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_e11">5 Revisions</span></li>
+                    </ul>
+                    <!-- Portfolio Benefits -->
+                    <ul class="benefit-list space-y-4 mb-10 text-sm font-medium hidden" data-for="portfolio">
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_port_1">Everything in Essential</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_port_2">Up to 15 Projects</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_port_3">Custom UI Design</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_port_4">Smooth Scroll Animations</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_port_5">Project Detail Pages</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_port_6">Skills Section</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_port_7">Testimonials</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_port_8">Resume / CV Download</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_port_9">Contact Form</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_port_10">Google Analytics</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_port_11">Speed Optimization</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t2_port_12">5 Revisions</span></li>
+                    </ul>
+                    <a href="#contact" class="block w-full py-4 text-center rounded-full bg-dks-white text-dks-black font-semibold hover:bg-neutral-200 transition-colors" data-i18n="price_inquire">Inquire Now</a>
+                </div>
+                
+                <!-- Tier 3 -->
+                <div class="bg-dks-light p-8 md:p-12 rounded-[24px] border border-neutral-200 flex flex-col hover:shadow-2xl transition-shadow duration-500">
+                    <div class="text-sm font-semibold text-dks-gray uppercase tracking-widest mb-2 title-val" data-landing="Enterprise" data-profile="Enterprise" data-ecommerce="Enterprise" data-portfolio="Enterprise" data-i18n="price_tier_3">Enterprise</div>
+                    <div class="text-4xl md:text-5xl font-semibold tracking-tighter text-dks-black mb-6"><span class="price-val inline-block" data-landing="Rp2.499.000" data-profile="Rp3.999.000" data-ecommerce="Rp7.999.000" data-portfolio="Rp2.299.000">Rp2.499.000</span></div>
+                    <p class="text-dks-gray font-medium leading-relaxed mb-8 flex-grow desc-val" data-tier="3" data-i18n="price_tier_3_desc_landing">Tailor-made structural engineering for massive scale and complex backend integrations.</p>
+                    <!-- Landing Benefits -->
+                    <ul class="benefit-list space-y-4 mb-10 text-sm font-medium text-dks-black" data-for="landing">
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_l1">Everything in Professional</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_l2">Premium Motion Effects</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_l3">Custom Illustrations</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_l4">CMS Integration</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_l5">Blog Section</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_l6">Analytics Setup</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_l7">Priority Support</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_l8">10 Revisions</span></li>
+                    </ul>
+                    <!-- Profile Benefits -->
+                    <ul class="benefit-list space-y-4 mb-10 text-sm font-medium text-dks-black hidden" data-for="profile">
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_p1">Unlimited Pages</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_p2">Custom Features</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_p3">Admin Dashboard</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_p4">Dynamic Content</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_p5">Career Page</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_p6">Multi-language Ready</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_p7">Advanced SEO</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_p8">Analytics Integration</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_p9">Priority Support</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_p10">10 Revisions</span></li>
+                    </ul>
+                    <!-- E-commerce Benefits -->
+                    <ul class="benefit-list space-y-4 mb-10 text-sm font-medium text-dks-black hidden" data-for="ecommerce">
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_e1">Everything in Professional</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_e2">Multi-role Dashboard</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_e3">Sales Reports</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_e4">Product Variants</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_e5">Shipping Integration</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_e6">Email Notifications</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_e7">Advanced Security</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_e8">Analytics Dashboard</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_e9">Priority Support</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_e10">10 Revisions</span></li>
+                    </ul>
+                    <!-- Portfolio Benefits -->
+                    <ul class="benefit-list space-y-4 mb-10 text-sm font-medium text-dks-black hidden" data-for="portfolio">
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_port_1">Unlimited Projects</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_port_2">Fully Custom Design</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_port_3">CMS Integration</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_port_4">Blog / Articles</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_port_5">Case Study Pages</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_port_6">Dark & Light Mode</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_port_7">Multi-language Ready</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_port_8">Advanced SEO</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_port_9">Analytics Dashboard</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_port_10">Priority Support</span></li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-dks-gray"></i> <span data-i18n="t3_port_11">Unlimited Minor Revisions</span></li>
+                    </ul>
+                    <a href="#contact" class="block w-full py-4 text-center rounded-full border border-dks-black text-dks-black font-semibold hover:bg-dks-black hover:text-dks-white transition-colors" data-i18n="price_inquire">Inquire Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-[120px] md:py-[200px] px-6 md:px-12 bg-dks-white">
+        <div class="max-w-[1000px] mx-auto">
+            <div class="mb-12 md:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div>
+                    <span class="text-xs font-semibold uppercase tracking-widest text-dks-gray mb-4 block"><span data-i18n="faq_label">Inquiries</span>
+                    <h3 class="text-4xl md:text-6xl font-semibold tracking-tighter text-dks-black"><h3 class="text-4xl md:text-6xl font-semibold tracking-tighter text-dks-black" data-i18n="faq_title"><h3 class="text-4xl md:text-6xl font-semibold tracking-tighter text-dks-black" data-i18n="faq_title">Common Questions</h3>
+                </div>
+                <p class="text-dks-gray font-medium max-w-[300px]" data-i18n="faq_desc">Everything you need to know about our process, timelines, and deliverables.</p>
+            </div>
+            
+            <div class="border-t border-neutral-200">
+                <!-- FAQ Item -->
+                <div class="faq-item border-b border-neutral-200">
+                    <button class="faq-btn w-full py-6 md:py-8 flex items-center justify-between text-left focus:outline-none group">
+                        <span class="text-lg md:text-3xl font-medium tracking-tight text-dks-black group-hover:text-dks-gray transition-colors" data-i18n="faq_1_q">How long does a typical project take?</span>
+                        <i data-lucide="plus" class="w-5 h-5 md:w-6 md:h-6 text-dks-black transition-transform duration-300 faq-icon flex-shrink-0 ml-4"></i>
+                    </button>
+                    <div class="faq-content overflow-hidden max-h-0 transition-all duration-500 ease-in-out">
+                        <p class="pb-6 md:pb-8 text-dks-gray font-medium leading-relaxed max-w-[800px] text-sm md:text-base" data-i18n="faq_1_a">Our end-to-end pipeline typically requires 8 to 12 weeks. This ensures ample time for rigorous discovery, pixel-perfect design, robust engineering, and multi-device QA testing without compromising quality.</p>
+                    </div>
+                </div>
+                <!-- FAQ Item -->
+                <div class="faq-item border-b border-neutral-200">
+                    <button class="faq-btn w-full py-6 md:py-8 flex items-center justify-between text-left focus:outline-none group">
+                        <span class="text-lg md:text-3xl font-medium tracking-tight text-dks-black group-hover:text-dks-gray transition-colors" data-i18n="faq_2_q">Do you work with startups or just enterprises?</span>
+                        <i data-lucide="plus" class="w-5 h-5 md:w-6 md:h-6 text-dks-black transition-transform duration-300 faq-icon flex-shrink-0 ml-4"></i>
+                    </button>
+                    <div class="faq-content overflow-hidden max-h-0 transition-all duration-500 ease-in-out">
+                        <p class="pb-6 md:pb-8 text-dks-gray font-medium leading-relaxed max-w-[800px] text-sm md:text-base" data-i18n="faq_2_a">We collaborate with both. Whether you are a Series-A startup aiming to establish a commanding presence or an enterprise seeking architectural modernization, our solutions scale to your structural needs.</p>
+                    </div>
+                </div>
+                <!-- FAQ Item -->
+                <div class="faq-item border-b border-neutral-200">
+                    <button class="faq-btn w-full py-6 md:py-8 flex items-center justify-between text-left focus:outline-none group">
+                        <span class="text-lg md:text-3xl font-medium tracking-tight text-dks-black group-hover:text-dks-gray transition-colors" data-i18n="faq_3_q">What technologies do you use?</span>
+                        <i data-lucide="plus" class="w-5 h-5 md:w-6 md:h-6 text-dks-black transition-transform duration-300 faq-icon flex-shrink-0 ml-4"></i>
+                    </button>
+                    <div class="faq-content overflow-hidden max-h-0 transition-all duration-500 ease-in-out">
+                        <p class="pb-6 md:pb-8 text-dks-gray font-medium leading-relaxed max-w-[800px] text-sm md:text-base" data-i18n="faq_3_a">Our primary stack for performance and flexibility is React (Next.js), Tailwind CSS, GSAP for fluid animations, and robust backend solutions like Node.js or Laravel depending on API requirements.</p>
+                    </div>
+                </div>
+                <!-- FAQ Item -->
+                <div class="faq-item border-b border-neutral-200">
+                    <button class="faq-btn w-full py-6 md:py-8 flex items-center justify-between text-left focus:outline-none group">
+                        <span class="text-lg md:text-3xl font-medium tracking-tight text-dks-black group-hover:text-dks-gray transition-colors" data-i18n="faq_4_q">Can you redesign an existing product?</span>
+                        <i data-lucide="plus" class="w-5 h-5 md:w-6 md:h-6 text-dks-black transition-transform duration-300 faq-icon flex-shrink-0 ml-4"></i>
+                    </button>
+                    <div class="faq-content overflow-hidden max-h-0 transition-all duration-500 ease-in-out">
+                        <p class="pb-6 md:pb-8 text-dks-gray font-medium leading-relaxed max-w-[800px] text-sm md:text-base" data-i18n="faq_4_a">Yes. We frequently audit and overhaul legacy platforms, improving their conversion rates, user retention, and overall aesthetic to align with modern luxury standards.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Huge CTA -->
+    <section id="contact" class="py-[120px] md:py-[200px] px-6 md:px-12 bg-dks-black text-dks-white overflow-hidden relative rounded-t-[40px] md:rounded-t-[80px]">
+        <div class="max-w-[1400px] mx-auto text-center relative z-10 flex flex-col items-center">
+            <h2 class="text-[12vw] font-semibold leading-[0.9] tracking-tighter mb-12 uppercase cta-text block">
+                <span data-i18n="cta_title_1">Let's Build</span> <br><span class="text-dks-gray italic" data-i18n="cta_title_2">Together</span>
+            </h2>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="mailto:drakizshi.studio@gmail.com?subject=Tertarik%20Membeli%20Jasa%20Website&body=Halo%20DKS%20Studio,%20saya%20tertarik%20ingin%20membeli%20jasa%20website." target="_blank" class="inline-flex items-center justify-center h-16 md:h-20 px-8 md:px-12 bg-dks-white text-dks-black rounded-full text-lg md:text-xl font-semibold hover:bg-neutral-200 transition-colors gap-3">
+                    drakizshi.studio@gmail.com <i data-lucide="arrow-up-right" class="w-6 h-6"></i>
+                </a>
+                <a href="https://wa.me/628990444237" target="_blank" class="inline-flex items-center justify-center h-16 md:h-20 px-8 md:px-12 bg-dks-white text-dks-black rounded-full text-lg md:text-xl font-semibold hover:bg-neutral-200 transition-colors gap-3">
+                    WhatsApp <i data-lucide="message-circle" class="w-6 h-6"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Minimalist Footer -->
+    <footer class="bg-dks-black text-dks-white pt-20 pb-10 px-6 md:px-12 border-t border-white/10">
+        <div class="max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 mb-20">
+            <div class="md:col-span-5">
+                <a href="#" class="text-2xl font-semibold tracking-tighter text-dks-white block mb-6">
+                    DKS STUDIO
+                </a>
+                <p class="text-dks-gray max-w-[300px] font-medium leading-relaxed">
+                    Elevating modern brands through superior digital design and architecture.
+                </p>
+            </div>
+            <div class="md:col-span-2">
+                <h5 class="text-xs font-semibold text-dks-gray uppercase tracking-widest mb-6">Menu</h5>
+                <ul class="space-y-3 font-medium">
+                    <li><a href="#about" class="hover-underline" data-i18n="nav_studio">Studio</a></li>
+                    <li><a href="#services" class="hover-underline" data-i18n="nav_expertise">Expertise</a></li>
+                    <li><a href="#works" class="hover-underline" data-i18n="nav_works">Works</a></li>
+                    <li><a href="#process" class="hover-underline">Pipeline</a></li>
+                </ul>
+            </div>
+            <div class="md:col-span-2">
+                <h5 class="text-xs font-semibold text-dks-gray uppercase tracking-widest mb-6">Socials</h5>
+                <ul class="space-y-3 font-medium">
+                    <li><a href="#" class="hover-underline">Twitter (X)</a></li>
+                    <li><a href="#" class="hover-underline">LinkedIn</a></li>
+                    <li><a href="#" class="hover-underline">Instagram</a></li>
+                    <li><a href="#" class="hover-underline">GitHub</a></li>
+                </ul>
+            </div>
+            <div class="md:col-span-3">
+                <h5 class="text-xs font-semibold text-dks-gray uppercase tracking-widest mb-6">Location</h5>
+                <p class="font-medium text-dks-gray leading-relaxed mb-4">
+                    Global Remote Team<br>Operating across GMT to PST.
+                </p>
+                <div class="text-sm">Local Time: <span id="clock" class="text-dks-white"></span></div>
+            </div>
+        </div>
+        
+        <div class="max-w-[1600px] mx-auto border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-dks-gray">
+            <div>&copy; 2026 DKS Studio. All rights reserved.</div>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-dks-white transition-colors" data-i18n="footer_privacy">Privacy Policy</a>
+                <a href="#" class="hover:text-dks-white transition-colors" data-i18n="footer_terms">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var swiper = new Swiper(".testimonialSwiper", {
+                slidesPerView: 1,
+                spaceBetween: 30,
+                loop: true,
+                grabCursor: true,
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+            });
+        });
+    </script>
+    <script src="scripts.js"></script>
+</body>
+</html>
